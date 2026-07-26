@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 	<title>Career options</title>
-	<rect width="32" height="32" rx="7" fill="#276b58" />
-	<!-- Three rising steps: the entry-to-ceiling idea the whole site is built on. -->
-	<rect x="7" y="19" width="5" height="7" rx="1.6" fill="#e2ede8" />
-	<rect x="13.5" y="13" width="5" height="13" rx="1.6" fill="#e2ede8" opacity="0.82" />
-	<rect x="20" y="6" width="5" height="20" rx="1.6" fill="#e2ede8" opacity="0.64" />
+	<!-- A stone on a warm plaster ground, lit from the top-left like everything else. -->
+	<rect width="32" height="32" rx="9" fill="#f0e9df" />
+	<polygon points="9,7 23,7 26,14 16,26 6,14" fill="#43705d" />
+	<polygon points="9,7 23,7 26,14 6,14" fill="#5c8d77" />
+	<polygon points="9,7 23,7 21.6,14 10.4,14" fill="#7fb49b" />
 </svg>

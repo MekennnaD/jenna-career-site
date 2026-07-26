@@ -30,7 +30,7 @@
 	<title>{profile.name} — career options</title>
 	<meta
 		name="description"
-		content="Nine career paths, each with what it pays, how hard it is to reach, and a link to the data behind the number."
+		content="Career paths, each with what it pays, how hard it is to reach from here, and a link to the data behind the number."
 	/>
 </svelte:head>
 
@@ -167,13 +167,16 @@
 
 <style>
 	section {
-		margin-bottom: 72px;
+		margin-bottom: 88px;
 	}
 
+	/* A title card at the entrance to the room. Nothing else competes with it. */
 	h1 {
-		font-size: clamp(1.7rem, 3.6vw, 2.3rem);
-		padding-block: 64px 0;
-		max-width: 20ch;
+		font-size: clamp(2rem, 4.4vw, 3rem);
+		font-variation-settings: 'SOFT' 60, 'WONK' 1;
+		font-weight: 400;
+		padding-block: 96px 0;
+		max-width: 18ch;
 	}
 
 	.controls {
@@ -181,59 +184,66 @@
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: 16px;
-		margin-top: 34px;
-		padding-bottom: 18px;
-		border-bottom: 1px solid var(--border);
+		gap: 18px;
+		margin-top: 44px;
 	}
 
 	.filters {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 7px;
+		gap: 9px;
 	}
 
+	/* Clay buttons. Raised at rest, pressed in when active or held. */
 	.chip {
 		font: inherit;
 		font-size: 0.85rem;
 		font-weight: 500;
-		padding: 7px 14px;
-		border-radius: var(--radius-xs);
-		border: 1px solid var(--border-strong);
+		padding: 9px 17px;
+		border: none;
+		border-radius: var(--r-pill);
 		background: var(--surface);
 		color: var(--text-muted);
+		box-shadow: var(--clay);
 		cursor: pointer;
 		transition:
-			background 0.2s var(--ease),
-			color 0.2s var(--ease),
-			border-color 0.2s var(--ease),
-			transform 0.1s var(--ease);
+			box-shadow 0.3s var(--ease),
+			color 0.3s var(--ease),
+			transform 0.15s var(--ease);
 	}
 
 	.chip:hover {
-		border-color: var(--accent);
 		color: var(--text);
+		transform: translateY(-1px);
 	}
 
-	/* Physical press feedback. */
 	.chip:active {
-		transform: scale(0.97);
+		transform: translateY(1px);
+		box-shadow: var(--clay-inset);
 	}
 
 	.chip.on {
-		background: var(--accent);
-		border-color: var(--accent);
-		color: var(--bg);
+		background: var(--accent-soft);
+		color: var(--accent-text);
+		box-shadow: var(--clay-inset);
 	}
 
 	.chip.clear {
-		border-style: dashed;
+		background: transparent;
+		box-shadow: none;
+		color: var(--text-faint);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.chip.clear:hover {
+		color: var(--text);
 	}
 
 	.sort {
 		display: inline-flex;
 		align-items: center;
-		gap: 9px;
+		gap: 10px;
 		font-size: 0.85rem;
 		color: var(--text-faint);
 	}
@@ -241,17 +251,13 @@
 	select {
 		font: inherit;
 		font-size: 0.85rem;
-		padding: 7px 11px;
-		border-radius: var(--radius-xs);
-		border: 1px solid var(--border-strong);
+		padding: 9px 14px;
+		border: none;
+		border-radius: var(--r-pill);
 		background: var(--surface);
 		color: var(--text);
+		box-shadow: var(--clay);
 		cursor: pointer;
-		transition: border-color 0.2s var(--ease);
-	}
-
-	select:hover {
-		border-color: var(--accent);
 	}
 
 	.meta {
@@ -259,83 +265,85 @@
 		flex-wrap: wrap;
 		align-items: baseline;
 		justify-content: space-between;
-		gap: 8px 32px;
-		margin-block: 18px 24px;
+		gap: 10px 40px;
+		margin-block: 34px 28px;
 	}
 
 	.count {
-		font-size: 0.82rem;
+		font-family: var(--font-mono);
+		font-size: 0.76rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 		color: var(--text-faint);
-		font-variant-numeric: tabular-nums;
 		white-space: nowrap;
 	}
 
 	.key {
-		font-size: 0.82rem;
+		font-size: 0.83rem;
 		color: var(--text-faint);
-		max-width: 68ch;
+		max-width: 66ch;
 	}
 
 	.key strong {
 		color: var(--text-muted);
-		font-weight: 550;
+		font-weight: 500;
 	}
 
 	/**
-	 * A uniform grid is the right call here despite the usual advice against
-	 * equal card columns — that advice is about marketing feature rows, and this
-	 * is a comparison table. Nine paths only mean something when they're read
-	 * against each other, so equal width is a feature.
+	 * A uniform grid is right here despite the usual advice against equal card
+	 * columns — that advice is about marketing feature rows, and this is a
+	 * comparison table. Fifteen paths only mean something read against each
+	 * other, so equal width is the point.
 	 *
-	 * `align-items: start` stops short cards being stretched to match their
-	 * tallest sibling. Grid rows still size to their tallest member, so keeping
-	 * card heights close matters — which is why the roadmaps start collapsed.
+	 * `align-items: start` stops short cards being stretched. Grid rows still
+	 * size to their tallest member, which is why roadmaps start collapsed.
 	 */
 	.grid {
 		display: grid;
-		gap: 18px;
-		grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+		gap: 26px;
+		grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
 		align-items: start;
 	}
 
 	.empty {
-		padding: 56px 0;
+		padding: 72px 0;
 		display: grid;
-		gap: 10px;
+		gap: 12px;
 		justify-items: start;
 	}
 
 	.empty > .chip {
-		margin-top: 8px;
+		margin-top: 10px;
 	}
 
+	/* Room-sized plinths for the two reference exhibits. */
 	.panel {
 		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
-		padding: 30px 28px;
-		scroll-margin-top: 88px;
+		border-radius: var(--r-lg);
+		box-shadow: var(--clay);
+		padding: 40px 36px;
+		scroll-margin-top: 32px;
 	}
 
 	.panel h2 {
-		font-size: 1.3rem;
-		margin-bottom: 16px;
+		font-size: 1.6rem;
+		margin-bottom: 20px;
 	}
 
 	.vintage {
-		margin-top: 22px;
-		padding-top: 16px;
-		border-top: 1px solid var(--border);
+		margin-top: 28px;
+		padding-top: 20px;
+		border-top: 1px solid var(--rule);
 	}
 
 	details summary {
-		font-size: 0.93rem;
-		font-weight: 550;
+		font-family: var(--font-display);
+		font-variation-settings: 'SOFT' 40, 'WONK' 1;
+		font-size: 1.15rem;
 		color: var(--text-muted);
 		cursor: pointer;
-		padding: 12px 0;
-		transition: color 0.2s var(--ease);
+		padding: 14px 0;
+		transition: color 0.3s var(--ease);
 	}
 
 	details summary:hover {
@@ -344,68 +352,67 @@
 
 	.jobs {
 		list-style: none;
-		margin: 16px 0 0;
+		margin: 22px 0 0;
 		padding: 0;
 		display: grid;
-		gap: 16px;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 22px;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 	}
 
 	.jobs > li {
 		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-md);
-		padding: 20px;
+		border-radius: var(--r-lg);
+		box-shadow: var(--clay);
+		padding: 26px 24px;
 	}
 
 	.job-head {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 10px;
 		justify-content: space-between;
 	}
 
 	.job-head h2 {
-		font-size: 1.02rem;
-		font-weight: 600;
+		font-size: 1.1rem;
 		margin: 0;
 	}
 
 	.role {
-		font-size: 0.83rem;
+		font-size: 0.82rem;
 		color: var(--text-faint);
-		margin-top: 4px;
+		margin-top: 5px;
 	}
 
 	.jobs ul {
-		margin: 14px 0;
+		margin: 16px 0;
 		padding-left: 18px;
-		font-size: 0.88rem;
+		font-size: 0.87rem;
 		color: var(--text-muted);
 	}
 
 	.signal {
 		font-size: 0.86rem;
 		color: var(--accent-text);
-		border-top: 1px solid var(--border);
-		padding-top: 13px;
+		border-top: 1px solid var(--rule);
+		padding-top: 15px;
 	}
 
 	.source-list {
 		list-style: none;
-		margin: 26px 0 0;
+		margin: 30px 0 0;
 		padding: 0;
 		display: grid;
-		gap: 18px;
+		gap: 22px;
 	}
 
 	.source-list > li {
-		padding-top: 16px;
-		border-top: 1px solid var(--border);
+		padding-top: 20px;
+		border-top: 1px solid var(--rule);
 	}
 
 	.source-list a {
-		font-weight: 550;
+		font-weight: 500;
 		font-size: 0.95rem;
 		color: var(--accent-text);
 		text-decoration: none;
@@ -417,11 +424,17 @@
 
 	.source-list ul {
 		list-style: none;
-		margin: 8px 0 0;
+		margin: 9px 0 0;
 		padding: 0;
 		font-size: 0.83rem;
 		color: var(--text-faint);
 		display: grid;
-		gap: 3px;
+		gap: 4px;
+	}
+
+	@media (max-width: 560px) {
+		.panel {
+			padding: 28px 22px;
+		}
 	}
 </style>

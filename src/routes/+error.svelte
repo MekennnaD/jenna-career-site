@@ -30,24 +30,27 @@
 
 	.back {
 		display: inline-block;
-		margin-top: 30px;
-		padding: 11px 20px;
-		border-radius: var(--radius-xs);
-		background: var(--accent);
-		color: var(--bg);
+		margin-top: 34px;
+		padding: 13px 24px;
+		border-radius: var(--r-pill);
+		background: var(--surface);
+		box-shadow: var(--clay);
+		color: var(--accent-text);
 		font-size: 0.92rem;
-		font-weight: 550;
+		font-weight: 500;
 		text-decoration: none;
 		transition:
-			transform 0.1s var(--ease),
-			filter 0.2s var(--ease);
+			transform 0.15s var(--ease),
+			box-shadow 0.3s var(--ease);
 	}
 
 	.back:hover {
-		filter: brightness(1.08);
+		transform: translateY(-1px);
+		box-shadow: var(--clay-raised);
 	}
 
 	.back:active {
-		transform: scale(0.98);
+		transform: translateY(1px);
+		box-shadow: var(--clay-inset);
 	}
 </style>

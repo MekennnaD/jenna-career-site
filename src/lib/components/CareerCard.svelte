@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Gem from '$lib/components/Gem.svelte';
+	import { gems } from '$lib/gems';
 	import type { Career, Interest } from '$lib/types';
 	import { money } from '$lib/format';
 
@@ -23,10 +25,17 @@
 	const crowded = $derived(
 		career.attainability.competition === 'High' || career.attainability.competition === 'Very high'
 	);
+
+	const stone = $derived(gems[career.gem]);
 </script>
 
-<article class="card rise" class:featured={career.topPick} style="--i: {index}">
+<article
+	class="clay rise"
+	class:featured={career.topPick}
+	style="--i: {index}; --h: {stone.hue}; --s: {stone.sat}%"
+>
 	<header>
+		<Gem gem={career.gem} />
 		<div class="titles">
 			<h3>{career.title}</h3>
 			<p class="track">{career.track}</p>
@@ -155,64 +164,71 @@
 				them as rough.
 			</p>
 		{/if}
+		<p class="stone-name">
+			<Gem gem={career.gem} size={13} />
+			{stone.name}
+		</p>
 	</footer>
 </article>
 
 <style>
+	/**
+	 * A plinth. Soft clay, no border anywhere — the shadow is the edge.
+	 * The gem is the only sharp, saturated object on it.
+	 */
 	article {
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
-		padding: 26px 24px 22px;
+		padding: 30px 28px 24px;
 		display: flex;
 		flex-direction: column;
-		gap: 20px;
+		gap: 22px;
 		transition:
-			transform 0.25s var(--ease),
-			box-shadow 0.25s var(--ease),
-			border-color 0.25s var(--ease);
+			transform 0.4s var(--ease),
+			box-shadow 0.4s var(--ease);
 	}
 
 	article:hover {
-		transform: translateY(-3px);
-		box-shadow: var(--shadow-lg);
-		border-color: var(--border-strong);
+		transform: translateY(-5px);
+		box-shadow: var(--clay-raised);
 	}
 
+	/* The recommended path sits on a faintly tinted plinth. Tint only — giving it
+	   a ring or a border would reintroduce the hard edges clay does not have. */
 	.featured {
-		border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-		box-shadow: var(--shadow-md);
+		background:
+			linear-gradient(var(--accent-soft), var(--accent-soft)) padding-box,
+			var(--surface);
 	}
 
 	header {
 		display: flex;
 		align-items: flex-start;
-		justify-content: space-between;
-		gap: 12px;
+		gap: 14px;
 	}
 
 	.titles {
+		flex: 1;
 		min-width: 0;
 	}
 
 	h3 {
-		font-size: 1.3rem;
-		font-weight: 600;
+		font-size: 1.32rem;
+		font-variation-settings: 'SOFT' 40, 'WONK' 1;
 	}
 
 	.track {
-		font-size: 0.85rem;
+		font-size: 0.83rem;
 		color: var(--text-faint);
-		margin-top: 5px;
+		margin-top: 6px;
 	}
 
+	/* Pressed into the plinth — the recessed tray holding the key readings. */
 	.attain {
 		display: grid;
-		gap: 16px;
-		padding: 16px;
-		border-radius: var(--radius-md);
-		background: var(--surface-alt);
+		gap: 18px;
+		padding: 20px;
+		border-radius: var(--r-md);
+		background: var(--surface-sunk);
+		box-shadow: var(--clay-inset);
 	}
 
 	.difficulty-head {
@@ -220,12 +236,12 @@
 		flex-wrap: wrap;
 		align-items: baseline;
 		justify-content: space-between;
-		gap: 4px 10px;
+		gap: 4px 12px;
 	}
 
 	.difficulty-value {
-		font-size: 0.9rem;
-		font-weight: 550;
+		font-size: 0.92rem;
+		font-weight: 500;
 		color: var(--accent-text);
 	}
 
@@ -233,21 +249,24 @@
 		color: var(--signal);
 	}
 
+	/* Five clay beads pressed into a groove. */
 	.meter {
 		display: flex;
-		gap: 4px;
-		margin-top: 10px;
+		gap: 5px;
+		margin-top: 12px;
 	}
 
 	.notch {
-		height: 5px;
+		height: 7px;
 		flex: 1;
-		border-radius: 999px;
-		background: var(--surface-sunk);
+		border-radius: var(--r-pill);
+		background: var(--bg);
+		box-shadow: var(--clay-inset-deep);
 	}
 
 	.notch.filled {
 		background: var(--accent);
+		box-shadow: none;
 	}
 
 	.meter.warn .notch.filled {
@@ -255,22 +274,19 @@
 	}
 
 	/**
-	 * `display: contents` on the wrappers promotes every dt and dd to a direct
-	 * grid item, so all labels share row 1 and all values share row 2. Without
-	 * it a label that wraps to two lines pushes its own value out of line with
-	 * the one beside it.
+	 * `display: contents` promotes every dt and dd to a direct grid item, and
+	 * column flow puts all labels in row 1 and all values in row 2. Without it a
+	 * label that wraps pushes its own value out of line with the one beside it.
 	 */
 	.attain-facts {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
-		/* Column flow, so the flattened dt/dd order fills each column top-to-bottom
-		   and every label lands in row 1 with every value in row 2. */
 		grid-auto-flow: column;
-		gap: 4px 12px;
+		gap: 5px 14px;
 		margin: 0;
-		padding-top: 14px;
-		border-top: 1px solid var(--border);
+		padding-top: 16px;
+		border-top: 1px solid var(--rule);
 	}
 
 	.attain-facts > div {
@@ -280,7 +296,7 @@
 	.attain-facts dd {
 		margin: 0;
 		font-size: 0.9rem;
-		font-weight: 550;
+		font-weight: 500;
 		align-self: start;
 	}
 
@@ -290,18 +306,20 @@
 
 	.barrier p:last-child,
 	.why p:last-child {
-		font-size: 0.93rem;
+		font-size: 0.92rem;
 		color: var(--text-muted);
-		margin-top: 7px;
+		margin-top: 8px;
 	}
 
+	/* The three headline readings. Hairlines rather than clay — inside dense data
+	   a soft shadow would only add mush. */
 	.figures {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 14px;
+		gap: 16px;
 		margin: 0;
-		padding: 16px 0;
-		border-block: 1px solid var(--border);
+		padding: 18px 0;
+		border-block: 1px solid var(--rule);
 	}
 
 	.figures > div {
@@ -309,31 +327,30 @@
 	}
 
 	.figures dd {
-		margin: 5px 0 0;
-		font-size: 1.2rem;
-		font-weight: 550;
+		margin: 6px 0 0;
+		font-size: 1.22rem;
+		font-weight: 500;
 	}
 
 	.figures p {
-		font-size: 0.75rem;
+		font-size: 0.74rem;
 		color: var(--text-faint);
-		line-height: 1.4;
-		margin-top: 4px;
+		line-height: 1.45;
+		margin-top: 5px;
 	}
 
-	/**
-	 * The roadmap is the reason this card exists — a timeline rail rather than a
-	 * bullet list, so the sequence reads as a route rather than a menu.
-	 */
+	/* A clay drawer that opens. */
 	.roadmap {
-		border: 1px solid var(--border);
-		border-radius: var(--radius-md);
-		padding: 4px 16px;
-		transition: border-color 0.2s var(--ease);
+		border-radius: var(--r-md);
+		background: var(--surface-alt);
+		box-shadow: var(--clay);
+		padding: 2px 18px;
+		transition: box-shadow 0.3s var(--ease);
 	}
 
-	.roadmap:hover {
-		border-color: var(--accent);
+	.roadmap[open] {
+		box-shadow: var(--clay-inset);
+		background: var(--surface-sunk);
 	}
 
 	.roadmap summary {
@@ -341,10 +358,10 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 12px;
-		padding: 12px 0;
+		padding: 15px 0;
 		cursor: pointer;
 		font-size: 0.88rem;
-		font-weight: 550;
+		font-weight: 500;
 		color: var(--accent-text);
 		list-style: none;
 	}
@@ -354,7 +371,7 @@
 	}
 
 	.chevron {
-		transition: transform 0.25s var(--ease);
+		transition: transform 0.35s var(--ease);
 		font-size: 0.9rem;
 	}
 
@@ -362,42 +379,44 @@
 		transform: rotate(180deg);
 	}
 
+	/* The route, as a strung line of beads. */
 	.roadmap ol {
 		list-style: none;
-		margin: 8px 0 16px;
+		margin: 6px 0 18px;
 		padding: 0;
 	}
 
 	.roadmap li {
 		display: grid;
-		grid-template-columns: 15px 1fr;
-		gap: 14px;
+		grid-template-columns: 16px 1fr;
+		gap: 16px;
 	}
 
 	.marker {
 		display: grid;
 		grid-template-rows: auto 1fr;
 		justify-items: center;
-		padding-top: 5px;
+		padding-top: 6px;
 	}
 
 	.dot {
-		width: 9px;
-		height: 9px;
-		border-radius: 999px;
+		width: 10px;
+		height: 10px;
+		border-radius: var(--r-pill);
 		background: var(--accent);
-		box-shadow: 0 0 0 3px var(--accent-soft);
+		box-shadow: inset -1px -1px 2px rgb(0 0 0 / 0.25), inset 1px 1px 2px rgb(255 255 255 / 0.4);
 	}
 
 	.rail {
-		width: 1.5px;
+		width: 2px;
 		height: 100%;
-		background: var(--border);
-		margin-top: 5px;
+		background: var(--rule);
+		margin-top: 6px;
+		border-radius: var(--r-pill);
 	}
 
 	.step {
-		padding-bottom: 20px;
+		padding-bottom: 22px;
 		min-width: 0;
 	}
 
@@ -409,11 +428,10 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 8px;
+		gap: 9px;
 		font-family: var(--font-mono);
-		font-size: 0.7rem;
-		font-weight: 500;
-		letter-spacing: 0.02em;
+		font-size: 0.69rem;
+		letter-spacing: 0.05em;
 		color: var(--text-faint);
 		text-transform: uppercase;
 	}
@@ -422,48 +440,49 @@
 		font-family: var(--font-sans);
 		text-transform: none;
 		letter-spacing: 0;
-		padding: 1px 7px;
-		border-radius: var(--radius-xs);
+		padding: 2px 9px;
+		border-radius: var(--r-pill);
 		background: var(--accent-soft);
 		color: var(--accent-text);
 		font-size: 0.72rem;
 	}
 
 	h4 {
-		margin: 5px 0 0;
-		font-size: 0.96rem;
-		font-weight: 550;
-		line-height: 1.35;
-		letter-spacing: -0.01em;
+		margin: 7px 0 0;
+		font-family: var(--font-display);
+		font-variation-settings: 'SOFT' 40, 'WONK' 1;
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.3;
 	}
 
 	.detail {
-		font-size: 0.89rem;
+		font-size: 0.88rem;
 		color: var(--text-muted);
-		margin-top: 5px;
+		margin-top: 6px;
 	}
 
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 6px;
+		gap: 7px;
 		list-style: none;
 		margin: 0;
 		padding: 0;
 	}
 
 	footer {
-		border-top: 1px solid var(--border);
-		padding-top: 16px;
+		border-top: 1px solid var(--rule);
+		padding-top: 18px;
 		margin-top: auto;
 	}
 
 	.sources {
 		list-style: none;
-		margin: 10px 0 0;
+		margin: 12px 0 0;
 		padding: 0;
 		display: grid;
-		gap: 9px;
+		gap: 10px;
 	}
 
 	.sources li {
@@ -474,7 +493,7 @@
 
 	.sources a {
 		color: var(--accent-text);
-		font-weight: 550;
+		font-weight: 500;
 		text-decoration: none;
 		width: fit-content;
 	}
@@ -490,7 +509,20 @@
 	.soft-note {
 		font-size: 0.77rem;
 		color: var(--text-faint);
-		margin-top: 12px;
+		margin-top: 14px;
+	}
+
+	/* The placard at the foot of the plinth, naming the specimen. */
+	.stone-name {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		margin-top: 18px;
+		font-family: var(--font-mono);
+		font-size: 0.66rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--text-faint);
 	}
 
 	@media (max-width: 520px) {

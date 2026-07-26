@@ -29,7 +29,7 @@ export const careers: Career[] = [
 		id: 'supply-chain',
 		title: 'Supply Chain & Logistics',
 		track: 'Coordinator → Logistician → Distribution Manager',
-		emoji: '📦',
+		gem: 'emerald',
 		topPick: true,
 		interests: ['process', 'leadership'],
 		entry: { title: 'Logistician', median: 80880, confidence: 'bls' },
@@ -99,10 +99,398 @@ export const careers: Career[] = [
 		]
 	},
 	{
+		id: 'field-trainer',
+		title: 'Field Trainer',
+		track: 'Store trainer → District trainer → Regional L&D',
+		gem: 'amethyst',
+		topPick: false,
+		interests: ['training', 'people', 'leadership'],
+		entry: { title: 'T&D specialist', median: 65850, confidence: 'bls' },
+		ceiling: { title: 'T&D manager', median: 127090, confidence: 'bls' },
+		growth: 6,
+		attainability: {
+			difficulty: 2,
+			difficultyLabel: 'Very doable',
+			competition: 'Moderate',
+			timeToEntry: '6–12 months',
+			barrier:
+				'The roles live inside large retail and restaurant chains, so it depends on being in the right company when a slot opens — and it usually means driving between stores. The advantage is that chains promote trainers off their own floor far more often than they hire from outside.'
+		},
+		why: `Your heaviest stated interest, reached through the industry you already know instead of
+			against it. Applying to corporate L&D puts you in a pile with career-changing teachers.
+			Applying to be a field trainer puts you in a pile with other retail employees — and you have
+			three chains, overnight shifts, and a promotion on your record. You would be teaching work
+			you have actually done, to people doing the job you actually did.`,
+		roadmap: [
+			{
+				when: 'Weeks 1–2',
+				action: 'Ask who trains new hires across your district',
+				detail:
+					'Every chain has this person and most employees have never met them. Find out whether they came from the floor, what the role is called internally, and who they report to. You are looking for a job title to aim at, not a favor.'
+			},
+			{
+				when: 'Weeks 2–6',
+				action: 'Become the person who trains at your store',
+				detail:
+					'Officially. Ask your manager to route new hires to you and to note it somewhere. Informal training is invisible to hiring systems; the same work with a label on it becomes experience.'
+			},
+			{
+				when: 'Months 1–3',
+				action: 'Build the onboarding doc your store is missing',
+				detail:
+					'Steps, common mistakes, what good looks like. This is the same artifact the Training & Development path needs, so the work counts twice if you end up choosing that route instead.'
+			},
+			{
+				when: 'Months 2–5',
+				action: 'Learn how trainers get measured',
+				detail:
+					'Time-to-productive, ninety-day retention, audit scores. Track your store\'s before and after. A trainer who talks about retention numbers rather than enthusiasm is the one who gets the district job.'
+			},
+			{
+				when: 'Months 6–12',
+				action: 'Apply internally first, then to other chains',
+				detail:
+					'Target Field Trainer, District Trainer, Retail Training Specialist. If Best Buy has no opening, competitors hire the same profile — and your three-retailer history is unusually strong for this specific role.'
+			}
+		],
+		sources: [
+			{
+				label: 'BLS — Training & Development Specialists',
+				url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm',
+				backs: 'Entry pay ($65,850)'
+			},
+			{
+				label: 'BLS — Training & Development Managers',
+				url: 'https://www.bls.gov/ooh/management/training-and-development-managers.htm',
+				backs: 'Ceiling pay ($127,090) and 6% growth'
+			}
+		]
+	},
+	{
+		id: 'safety-specialist',
+		title: 'Health & Safety Specialist',
+		track: 'Safety coordinator → EHS specialist → Safety manager',
+		gem: 'citrine',
+		topPick: false,
+		interests: ['process', 'people', 'leadership'],
+		entry: { title: 'Occupational health & safety technician', median: 58440, confidence: 'bls' },
+		ceiling: { title: 'Occupational health & safety specialist', median: 83910, confidence: 'bls' },
+		growth: null,
+		attainability: {
+			difficulty: 2,
+			difficultyLabel: 'Very doable',
+			competition: 'Low',
+			timeToEntry: '3–9 months',
+			barrier:
+				'The least crowded door on this page. OSHA 30 costs a couple hundred dollars and takes a few days. The real catch is temperamental rather than technical: the job involves telling people to stop doing things the fast way, which means being comfortable being briefly unpopular with people you like.'
+		},
+		why: `Warehouse experience isn't merely relevant here — it is the qualification. You already know
+			which corners get cut at 2am, because you have worked those shifts and been tired enough to
+			consider cutting them. This is process improvement where the thing being improved is whether
+			somebody goes home intact. Distribution centers hire for it constantly and almost never see
+			applicants who have done the floor work.`,
+		roadmap: [
+			{
+				when: 'Weeks 1–3',
+				action: 'Take OSHA 30 for General Industry',
+				detail:
+					'The single highest return-per-dollar credential on this entire site. It is the thing postings ask for, it takes a few days online, and it is cheap enough to buy yourself if your employer will not.',
+				cost: '~$160–200'
+			},
+			{
+				when: 'Weeks 2–6',
+				action: 'Volunteer for your site\'s safety committee',
+				detail:
+					'Most warehouses have one and most are short of volunteers. It gives you incident reviews, walkthroughs, and audit language on your resume without changing jobs.'
+			},
+			{
+				when: 'Months 1–3',
+				action: 'Write up one near-miss properly',
+				detail:
+					'Pick something real you have seen — a blocked aisle, a bad lift, a pallet stacked wrong. Document the hazard, the root cause, and the fix. Safety hiring runs on whether you can think in root causes, and this is how you show it.'
+			},
+			{
+				when: 'Months 3–6',
+				action: 'Apply to coordinator and technician titles',
+				detail:
+					'Target Safety Coordinator, EHS Technician, Safety Specialist at distribution centers, manufacturers, and third-party logistics firms. Your floor experience is the differentiator, so lead with it rather than apologizing for it.'
+			},
+			{
+				when: 'Months 9–24',
+				action: 'Move toward the specialist rung',
+				detail:
+					'Once inside, ask about employer-funded progression toward the CSP or ASP credentials. This field funds its own certifications more reliably than most, and they are what separate the technician pay band from the specialist one.',
+				cost: 'Often employer-funded'
+			}
+		],
+		sources: [
+			{
+				label: 'BLS — Occupational Health & Safety Specialists and Technicians',
+				url: 'https://www.bls.gov/ooh/healthcare/occupational-health-and-safety-specialists-and-technicians.htm',
+				backs: 'Entry pay ($58,440, technicians) and ceiling pay ($83,910, specialists)'
+			}
+		]
+	},
+	{
+		id: 'project-management',
+		title: 'Project Management',
+		track: 'Coordinator → PM Specialist → Senior PM',
+		gem: 'sapphire',
+		topPick: false,
+		interests: ['process', 'leadership'],
+		entry: { title: 'Project coordinator', median: 62000, confidence: 'estimate' },
+		ceiling: { title: 'Project management specialist', median: 100750, confidence: 'bls' },
+		growth: 6,
+		attainability: {
+			difficulty: 3,
+			difficultyLabel: 'A real climb, but a fair one',
+			competition: 'High',
+			timeToEntry: '6–12 months',
+			barrier:
+				'Your degree gets you past the filter — BLS lists a bachelor\'s as typical entry, and you have one. What you need is vocabulary (scope, stakeholders, dependencies, critical path) and one project you can narrate start to finish. It is a popular target for career changers, so expect volume.'
+		},
+		why: `"The way of stuff" applied to work instead of product. Sequencing tasks, spotting what
+			blocks what, keeping people pointed the same direction while a clock runs — you do this on a
+			truck shift already. It is also one of the largest occupations here, with roughly 78,200
+			openings a year, which means the door is wide even if the hallway is busy.`,
+		roadmap: [
+			{
+				when: 'Weeks 1–4',
+				action: 'Google Project Management Certificate',
+				detail:
+					'The standard on-ramp, and Coursera financial aid is routinely approved — apply for it rather than paying monthly. It gives you the vocabulary gap in one package.',
+				cost: '~$49/mo, aid available'
+			},
+			{
+				when: 'Months 1–2',
+				action: 'Name a project you have already run',
+				detail:
+					'A seasonal floor reset, a holiday inventory push, onboarding a group of new hires. Write it up as scope, timeline, people involved, what went wrong, what you changed. You have run projects; you have just never called them that.'
+			},
+			{
+				when: 'Months 2–4',
+				action: 'Volunteer to coordinate something at work',
+				detail:
+					'A store reset, an audit, a seasonal changeover. Ask to own the schedule and the checklist. Coordinating is the job title one rung below the one you want, and doing it internally is free.'
+			},
+			{
+				when: 'Months 4–8',
+				action: 'Apply to coordinator titles, not specialist ones',
+				detail:
+					'Project Coordinator, Operations Coordinator, Program Coordinator. Aiming one rung lower than the ceiling is what makes this path work in under a year rather than three.'
+			},
+			{
+				when: 'Months 12–24',
+				action: 'CAPM, then PMP once you have the hours',
+				detail:
+					'PMP requires documented project hours, which is why it comes after the first role rather than before. CAPM is the version you can sit for without them.',
+				cost: 'CAPM ~$225–300'
+			}
+		],
+		sources: [
+			{
+				label: 'BLS — Project Management Specialists',
+				url: 'https://www.bls.gov/ooh/business-and-financial/project-management-specialists.htm',
+				backs: 'Ceiling pay ($100,750), 6% growth, and the ~78,200 annual openings figure'
+			}
+		]
+	},
+	{
+		id: 'instructional-design',
+		title: 'Instructional Design',
+		track: 'Training coordinator → Instructional designer → Senior ID',
+		gem: 'tanzanite',
+		topPick: false,
+		interests: ['training', 'analysis'],
+		entry: { title: 'T&D specialist', median: 65850, confidence: 'bls' },
+		ceiling: { title: 'Senior instructional designer', median: 95000, confidence: 'estimate' },
+		growth: 6,
+		attainability: {
+			difficulty: 3,
+			difficultyLabel: 'A real climb, but a fair one',
+			competition: 'High',
+			timeToEntry: '9–18 months',
+			barrier:
+				'Strictly portfolio-gated — nobody hires an instructional designer without seeing something they built. The authoring tools (Articulate Storyline, Rise) cost real money outside of trial periods, and the field is crowded with career-changing teachers who arrive already knowing the theory.'
+		},
+		why: `The building side of training rather than the delivering side. If the part you like is
+			making a confusing thing clear — working out the right order to explain something in, and
+			what someone needs to know before they can understand the next bit — this is that, as a
+			full-time job. It also rewards the writing your degree actually trained you to do.`,
+		roadmap: [
+			{
+				when: 'Weeks 1–4',
+				action: 'Learn ADDIE and one other model',
+				detail:
+					'Audit an instructional design fundamentals course free on Coursera. ADDIE is named directly in most postings. You need to speak the framework before anything you build reads as professional.',
+				cost: 'Free to audit'
+			},
+			{
+				when: 'Months 1–3',
+				action: 'Build your first real module on a free trial',
+				detail:
+					'Articulate offers a 30-day trial — use it deliberately rather than casually. Convert your warehouse onboarding knowledge into one polished interactive module. Subject matter you know cold makes for a much better first portfolio piece than an invented one.',
+				cost: 'Free trial'
+			},
+			{
+				when: 'Months 3–6',
+				action: 'Get to three portfolio pieces',
+				detail:
+					'One e-learning module, one job aid, one short video or storyboard. Three is roughly the threshold where a portfolio site stops looking like an experiment.'
+			},
+			{
+				when: 'Months 6–12',
+				action: 'Take contract work before full-time roles',
+				detail:
+					'Small contract projects are far easier to land than salaried ID roles and they solve the experience problem quickly. Nonprofits and small companies need this work and rarely have anyone doing it.'
+			},
+			{
+				when: 'Months 12–18',
+				action: 'Apply salaried, portfolio first',
+				detail:
+					'Target Instructional Designer, Learning Experience Designer, Training Content Developer. The portfolio link goes at the top of the resume — in this field it matters more than the work history above it.'
+			}
+		],
+		sources: [
+			{
+				label: 'BLS — Training & Development Specialists',
+				url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm',
+				backs: 'Entry pay ($65,850) and 6% growth; the senior figure is an estimate'
+			}
+		]
+	},
+	{
+		id: 'workforce-development',
+		title: 'Workforce Development',
+		track: 'Employment specialist → Program coordinator → Program manager',
+		gem: 'roseQuartz',
+		topPick: false,
+		interests: ['people', 'training', 'leadership'],
+		entry: { title: 'Employment / workforce specialist', median: 50000, confidence: 'estimate' },
+		ceiling: { title: 'Social & community service manager', median: 78240, confidence: 'bls' },
+		growth: 6,
+		attainability: {
+			difficulty: 2,
+			difficultyLabel: 'Very doable',
+			competition: 'Moderate',
+			timeToEntry: '3–9 months',
+			barrier:
+				'The catch is money, and it is a real one. This is the lowest-paying path on the page, and nonprofit and grant-funded roles are less stable than corporate ones. What it buys is work whose point is legible every single day, which not everything here can say.'
+		},
+		why: `You would be helping people in more or less the position you are in right now — working out
+			what their experience is actually worth and how to say it out loud. Of everything on this
+			page, this is the closest match to what you described wanting: coaching, empathy, work that
+			means something. It also pays the least of anything here. Both of those are true at once, and
+			you should decide with both in front of you.`,
+		roadmap: [
+			{
+				when: 'Weeks 1–2',
+				action: 'Find your local workforce board',
+				detail:
+					'Every region has one, funded federally through WIOA, and most people have never heard of them. Look up who runs employment services near you and what programs they operate. This is the sector, and it is largely invisible from outside.'
+			},
+			{
+				when: 'Weeks 2–8',
+				action: 'Volunteer somewhere that does resume help',
+				detail:
+					'A library program, a community center, a jobs nonprofit. You will find out quickly whether the actual work energizes you or drains you — and that answer matters more here than on any other path, because the pay will not carry you through indifference.'
+			},
+			{
+				when: 'Months 1–3',
+				action: 'Learn the vocabulary of the funding',
+				detail:
+					'WIOA, case management, participant outcomes, placement rate. These programs live or die on reporting, and knowing that language separates a serious applicant from a well-meaning one.'
+			},
+			{
+				when: 'Months 3–6',
+				action: 'Apply to specialist and case manager titles',
+				detail:
+					'Employment Specialist, Career Navigator, Workforce Development Specialist, Job Coach. Your own non-linear path is an asset in interviews here rather than something to explain away.'
+			},
+			{
+				when: 'Year 1–3',
+				action: 'Move toward program management',
+				detail:
+					'The ceiling on this path is management, where the pay becomes reasonable. Getting there means learning grants and reporting, not just serving participants well — which is the part most people in this field never plan for.'
+			}
+		],
+		sources: [
+			{
+				label: 'BLS — Social & Community Service Managers',
+				url: 'https://www.bls.gov/ooh/management/social-and-community-service-managers.htm',
+				backs: 'Ceiling pay ($78,240) and 6% growth; the entry figure is an estimate'
+			}
+		]
+	},
+	{
+		id: 'space-planning',
+		title: 'Space Planning & Merchandising Analytics',
+		track: 'Planogram analyst → Space planner → Space planning manager',
+		gem: 'turquoise',
+		topPick: false,
+		interests: ['process', 'analysis'],
+		entry: { title: 'Planogram / space analyst', median: 58000, confidence: 'estimate' },
+		ceiling: { title: 'Space planning manager', median: 95000, confidence: 'estimate' },
+		growth: null,
+		attainability: {
+			difficulty: 3,
+			difficultyLabel: 'A real climb, but a fair one',
+			competition: 'Moderate',
+			timeToEntry: '6–12 months',
+			barrier:
+				'A small field with specific software — Blue Yonder and JDA Space Planning — and the roles sit at corporate offices of large retailers rather than being scattered everywhere. It has no BLS occupation of its own, so both pay figures here are softer than most on this page.'
+		},
+		why: `This is the most literal version of something you already liked doing. Floor sets at
+			Kohl's, getting product presentation right, the specific satisfaction of a section being
+			correct rather than approximately correct — that is this job, done for an entire chain
+			instead of one store. Almost nobody connects merchandising work to an analytical career, and
+			the connection is real.`,
+		roadmap: [
+			{
+				when: 'Weeks 1–3',
+				action: 'Write down what you already know about resets',
+				detail:
+					'How a planogram arrives, what makes one work on the floor versus on paper, where the instructions are always wrong. Corporate space planners rarely have this knowledge and quietly need it.'
+			},
+			{
+				when: 'Weeks 2–6',
+				action: 'Get properly good at Excel',
+				detail:
+					'This role is spreadsheets and spatial logic in equal measure. Same free Microsoft Learn path the analyst route uses, so the effort transfers if you change your mind.',
+				cost: 'Free'
+			},
+			{
+				when: 'Months 1–4',
+				action: 'Learn the software the field actually runs on',
+				detail:
+					'Blue Yonder and JDA Space Planning dominate. Look for trial access, community tutorials, or a retail employer that will train you on it. Naming the tool correctly in an application is most of the battle in a field this small.'
+			},
+			{
+				when: 'Months 3–6',
+				action: 'Talk to your own corporate merchandising team',
+				detail:
+					'Best Buy and Kohl\'s both have space planning teams somewhere. Ask your manager who sends the resets. An internal introduction is worth more here than in almost any other path, because the field is too small to have a normal front door.'
+			},
+			{
+				when: 'Months 6–12',
+				action: 'Apply, and read the titles carefully',
+				detail:
+					'Space Planning Analyst, Planogram Analyst, Merchandising Analyst, Category Space Analyst. The titles vary wildly between companies, so search by what the job does rather than what it is called.'
+			}
+		],
+		sources: [
+			{
+				label: 'BLS — Buyers & Purchasing Agents (closest tracked occupation)',
+				url: 'https://www.bls.gov/ooh/business-and-financial/purchasing-managers-buyers-and-purchasing-agents.htm',
+				backs: 'Context only — BLS has no space planning occupation, so both figures on this card are estimates'
+			}
+		]
+	},
+	{
 		id: 'process-analyst',
 		title: 'Process / Operations Analyst',
 		track: 'Analyst → Senior Analyst → Manager',
-		emoji: '⚙️',
+		gem: 'peridot',
 		topPick: false,
 		interests: ['process', 'analysis'],
 		entry: { title: 'Operations / process analyst', median: 60000, confidence: 'estimate' },
@@ -167,7 +555,7 @@ export const careers: Career[] = [
 		id: 'training-development',
 		title: 'Training & Development',
 		track: 'Specialist → Manager',
-		emoji: '🎓',
+		gem: 'sugilite',
 		topPick: false,
 		interests: ['training', 'people', 'leadership'],
 		entry: { title: 'T&D specialist', median: 65850, confidence: 'bls' },
@@ -236,7 +624,7 @@ export const careers: Career[] = [
 		id: 'operations-manager',
 		title: 'Operations Manager',
 		track: 'Supervisor → Ops Manager → Director',
-		emoji: '🧭',
+		gem: 'onyx',
 		topPick: false,
 		interests: ['leadership', 'process'],
 		entry: { title: 'Operations supervisor', median: 62000, confidence: 'estimate' },
@@ -297,7 +685,7 @@ export const careers: Career[] = [
 		id: 'customer-success',
 		title: 'Customer Success',
 		track: 'CSM → Senior CSM → CS Lead',
-		emoji: '🤝',
+		gem: 'carnelian',
 		topPick: false,
 		interests: ['people', 'leadership'],
 		entry: { title: 'Customer success manager', median: 75000, confidence: 'estimate' },
@@ -360,7 +748,7 @@ export const careers: Career[] = [
 		id: 'human-resources',
 		title: 'Human Resources',
 		track: 'HR Specialist → HR Manager',
-		emoji: '👥',
+		gem: 'jade',
 		topPick: false,
 		interests: ['people', 'training'],
 		entry: { title: 'HR specialist', median: 72910, confidence: 'bls' },
@@ -428,7 +816,7 @@ export const careers: Career[] = [
 		id: 'tech-sales',
 		title: 'Tech Sales',
 		track: 'SDR → Account Executive',
-		emoji: '🚀',
+		gem: 'ruby',
 		topPick: false,
 		interests: ['people'],
 		entry: { title: 'Sales development rep', median: 65000, confidence: 'estimate' },
@@ -490,7 +878,7 @@ export const careers: Career[] = [
 		id: 'market-research',
 		title: 'Market Research Analyst',
 		track: 'Analyst → Senior → Insights Manager',
-		emoji: '📊',
+		gem: 'lapis',
 		topPick: false,
 		interests: ['analysis'],
 		entry: { title: 'Market research analyst', median: 76950, confidence: 'bls' },
@@ -553,7 +941,7 @@ export const careers: Career[] = [
 		id: 'marketing-manager',
 		title: 'Marketing Manager',
 		track: 'Coordinator → Specialist → Manager',
-		emoji: '📣',
+		gem: 'topaz',
 		topPick: false,
 		interests: ['analysis', 'leadership'],
 		entry: { title: 'Marketing coordinator', median: 55000, confidence: 'estimate' },

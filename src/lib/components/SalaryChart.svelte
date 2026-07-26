@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Gem from '$lib/components/Gem.svelte';
+	import { gems } from '$lib/gems';
 	import type { Career } from '$lib/types';
 	import { money, moneyShort } from '$lib/format';
 
@@ -17,7 +19,10 @@
 			title: c.title,
 			entry: c.entry.median,
 			ceiling: c.ceiling.median,
-			soft: c.entry.confidence === 'estimate' || c.ceiling.confidence === 'estimate'
+			soft: c.entry.confidence === 'estimate' || c.ceiling.confidence === 'estimate',
+			// Each bar wears its path's stone, so the chart and the cards share one
+			// visual language and a row can be matched to its card by colour alone.
+			gem: gems[c.gem]
 		}))
 	);
 </script>
@@ -36,8 +41,11 @@
 		</div>
 
 		{#each rows as row (row.id)}
-			<div class="row">
-				<span class="name">{row.title}</span>
+			<div class="row" style="--h: {row.gem.hue}; --s: {row.gem.sat}%">
+				<span class="name">
+					<Gem gem={careers.find((c) => c.id === row.id)!.gem} size={13} />
+					<span class="label-text">{row.title}</span>
+				</span>
 				<div class="track">
 					<div
 						class="bar"
@@ -69,13 +77,12 @@
 
 	.chart {
 		position: relative;
-		margin-top: 24px;
+		margin-top: 28px;
 	}
 
 	.gridlines {
 		position: absolute;
-		/* Matches .track's inset so lines sit under the bars, not the labels. */
-		inset: 0 48px 28px var(--label-w, 200px);
+		inset: 0 52px 30px var(--label-w, 210px);
 	}
 
 	.gridline {
@@ -83,78 +90,100 @@
 		top: 0;
 		bottom: 0;
 		width: 1px;
-		background: var(--border);
+		background: var(--text-faint);
+		opacity: 0.35;
 	}
 
 	.row {
 		display: grid;
-		grid-template-columns: var(--label-w, 200px) 1fr;
+		grid-template-columns: var(--label-w, 210px) 1fr;
 		align-items: center;
-		gap: 12px;
-		padding-block: 4px;
+		gap: 14px;
+		padding-block: 5px;
 	}
 
 	.name {
+		display: flex;
+		align-items: center;
+		gap: 9px;
 		font-size: 0.85rem;
 		color: var(--text-muted);
+		min-width: 0;
+	}
+
+	/* Truncation lives on the text, not the flex row — otherwise the gem gets
+	   squeezed instead of the label. */
+	.label-text {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
+	/**
+	 * A channel pressed into the clay, holding an inlaid stone. Slightly
+	 * translucent on purpose: the gridlines sit behind it, and an opaque channel
+	 * hides them entirely, leaving no way to tell where $50k falls.
+	 */
 	.track {
 		position: relative;
-		height: 28px;
-		margin-right: 48px;
+		height: 26px;
+		margin-right: 52px;
+		border-radius: var(--r-pill);
+		background: color-mix(in srgb, var(--surface-sunk) 86%, transparent);
+		box-shadow: var(--clay-inset);
 	}
 
 	.bar {
 		position: absolute;
-		top: 6px;
+		top: 5px;
 		height: 16px;
-		border-radius: 999px;
+		border-radius: var(--r-pill);
 		background: linear-gradient(
-			90deg,
-			color-mix(in srgb, var(--accent) 40%, transparent),
-			var(--accent)
+			160deg,
+			hsl(var(--h) var(--s) 62%),
+			hsl(calc(var(--h) + 14) calc(var(--s) * 0.9) 46%)
 		);
-		min-width: 4px;
-		transition: filter 0.2s var(--ease);
+		box-shadow:
+			inset 1px 1px 2px hsl(var(--h) 40% 88% / 0.55),
+			inset -1px -2px 3px rgb(60 40 20 / 0.28);
+		min-width: 10px;
+		transition: filter 0.25s var(--ease);
 	}
 
 	.row:hover .bar {
-		filter: brightness(1.12);
+		filter: brightness(1.08) saturate(1.08);
 	}
 
+	/* Soft data reads as cut glass rather than solid stone. */
 	.bar.soft {
 		background-image: repeating-linear-gradient(
 			135deg,
-			var(--accent) 0 5px,
-			color-mix(in srgb, var(--accent) 38%, transparent) 5px 10px
+			hsl(var(--h) var(--s) 58%) 0 6px,
+			hsl(var(--h) calc(var(--s) * 0.45) 62% / 0.4) 6px 12px
 		);
 	}
 
 	.endcap {
 		position: absolute;
-		top: 5px;
-		margin-left: 9px;
+		top: 4px;
+		margin-left: 11px;
 		font-size: 0.76rem;
-		font-weight: 550;
+		font-weight: 500;
 		color: var(--text-muted);
 		white-space: nowrap;
 	}
 
 	.axis {
 		position: relative;
-		height: 28px;
-		margin-left: var(--label-w, 200px);
-		margin-right: 48px;
-		border-top: 1px solid var(--border);
+		height: 30px;
+		margin-left: var(--label-w, 210px);
+		margin-right: 52px;
+		border-top: 1px solid var(--rule);
 	}
 
 	.axis span {
 		position: absolute;
-		top: 7px;
+		top: 8px;
 		transform: translateX(-50%);
 		font-size: 0.72rem;
 		color: var(--text-faint);
@@ -162,7 +191,7 @@
 
 	@media (max-width: 640px) {
 		.chart {
-			--label-w: 118px;
+			--label-w: 124px;
 		}
 	}
 </style>

@@ -1,3 +1,5 @@
+import type { GemId } from '$lib/gems';
+
 /**
  * Shared content types.
  *
@@ -95,7 +97,12 @@ export interface Career {
 	title: string;
 	/** The progression, e.g. "Specialist → Manager". */
 	track: string;
-	emoji: string;
+	/**
+	 * This path's stone. Visual identity only — it must never carry meaning,
+	 * since difficulty and competition own the semantic colours. Keep every
+	 * gem unique across the array so no two cards look alike at a glance.
+	 */
+	gem: GemId;
 	/** Surfaced first and badged. At most one should be true. */
 	topPick: boolean;
 	interests: InterestId[];

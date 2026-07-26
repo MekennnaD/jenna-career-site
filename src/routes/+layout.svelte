@@ -23,14 +23,16 @@
 </footer>
 
 <style>
+	/* The note by the door on the way out. No rule above it — the whitespace is
+	   the separation. */
 	footer {
-		border-top: 1px solid var(--border);
-		padding-block: 32px 48px;
+		padding-block: 8px 72px;
 	}
 
 	footer p {
 		font-size: 0.87rem;
+		font-style: italic;
 		color: var(--text-faint);
-		max-width: var(--measure);
+		max-width: 52ch;
 	}
 </style>
