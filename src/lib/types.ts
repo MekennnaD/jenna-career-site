@@ -29,8 +29,6 @@ export interface Job {
 export interface Profile {
 	name: string;
 	degree: string;
-	headline: string;
-	summary: string;
 	jobs: Job[];
 	interests: Interest[];
 }
@@ -70,6 +68,28 @@ export interface Attainability {
 	barrier: string;
 }
 
+/**
+ * One step on a path's roadmap.
+ *
+ * Steps are written against Jenna's actual starting point — full-time at the
+ * Best Buy warehouse, a liberal arts degree, no white-collar title yet — and
+ * are meant to be specific enough to act on this week. "Network more" is not a
+ * step; "ask your supervisor what an internal move to inventory control
+ * requires" is.
+ *
+ * Timeframes deliberately overlap: these run in parallel, not in a queue.
+ */
+export interface RoadmapStep {
+	/** When this happens, e.g. "Weeks 1–2" or "Year 2–3". */
+	when: string;
+	/** The action itself, in the imperative. */
+	action: string;
+	/** Why it matters or how to do it, grounded in her situation. */
+	detail: string;
+	/** Rough cost. Omit when the step is free — most are. */
+	cost?: string;
+}
+
 export interface Career {
 	id: string;
 	title: string;
@@ -86,8 +106,8 @@ export interface Career {
 	attainability: Attainability;
 	/** Why her actual history maps onto this work. Written to her, in second person. */
 	why: string;
-	/** The single next action for this path. */
-	firstMove: string;
+	/** Ordered route from where she is today to the job. */
+	roadmap: RoadmapStep[];
 	/** Every source backing the numbers on this card. At least one. */
 	sources: Source[];
 }

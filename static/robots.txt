@@ -1,3 +1,5 @@
-# allow crawling everything by default
+# A personal tool with one intended reader, not a public page. It carries a real
+# person's employment history, so it should not be indexed even though the
+# GitHub Pages URL is technically public.
 User-agent: *
-Disallow:
+Disallow: /

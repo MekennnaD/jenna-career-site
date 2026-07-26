@@ -4,8 +4,8 @@
 
 	let { careers }: { careers: Career[] } = $props();
 
-	// Built with CSS grid rather than SVG so it reflows on narrow screens and
-	// the labels stay real, selectable text.
+	// CSS grid rather than SVG, so it reflows on narrow screens and every label
+	// stays real, selectable text.
 	const AXIS_MAX = 175_000;
 	const ticks = [0, 50_000, 100_000, 150_000];
 
@@ -15,7 +15,6 @@
 		careers.map((c) => ({
 			id: c.id,
 			title: c.title,
-			emoji: c.emoji,
 			entry: c.entry.median,
 			ceiling: c.ceiling.median,
 			soft: c.entry.confidence === 'estimate' || c.ceiling.confidence === 'estimate'
@@ -24,13 +23,9 @@
 </script>
 
 <figure>
-	<figcaption>
-		<h3>Starting pay → ceiling</h3>
-		<p class="caveat">
-			Each bar runs from a realistic first-job number to the median for the senior role in that
-			track. Striped bars lean on self-reported salary aggregates rather than BLS medians — read
-			them as rough.
-		</p>
+	<figcaption class="caveat">
+		Each bar runs from a realistic first-job number to the median for the senior role in that
+		track. Striped bars rest on self-reported salary aggregates rather than BLS medians.
 	</figcaption>
 
 	<div class="chart">
@@ -42,10 +37,7 @@
 
 		{#each rows as row (row.id)}
 			<div class="row">
-				<div class="label">
-					<span aria-hidden="true">{row.emoji}</span>
-					<span class="name">{row.title}</span>
-				</div>
+				<span class="name">{row.title}</span>
 				<div class="track">
 					<div
 						class="bar"
@@ -57,14 +49,14 @@
 							{row.title}: {money(row.entry)} to {money(row.ceiling)}
 						</span>
 					</div>
-					<span class="endcap" style:left={pct(row.ceiling)}>{moneyShort(row.ceiling)}</span>
+					<span class="endcap num" style:left={pct(row.ceiling)}>{moneyShort(row.ceiling)}</span>
 				</div>
 			</div>
 		{/each}
 
 		<div class="axis" aria-hidden="true">
 			{#each ticks as tick (tick)}
-				<span style:left={pct(tick)}>{tick === 0 ? '$0' : moneyShort(tick)}</span>
+				<span class="num" style:left={pct(tick)}>{tick === 0 ? '$0' : moneyShort(tick)}</span>
 			{/each}
 		</div>
 	</div>
@@ -75,21 +67,15 @@
 		margin: 0;
 	}
 
-	figcaption h3 {
-		font-size: 1.05rem;
-		font-weight: 640;
-		margin-bottom: 5px;
-	}
-
 	.chart {
 		position: relative;
-		margin-top: 20px;
+		margin-top: 24px;
 	}
 
 	.gridlines {
 		position: absolute;
-		/* Line up with .track, which starts after the label column. */
-		inset: 0 46px 26px var(--label-w, 190px);
+		/* Matches .track's inset so lines sit under the bars, not the labels. */
+		inset: 0 48px 28px var(--label-w, 200px);
 	}
 
 	.gridline {
@@ -102,22 +88,15 @@
 
 	.row {
 		display: grid;
-		grid-template-columns: var(--label-w, 190px) 1fr;
+		grid-template-columns: var(--label-w, 200px) 1fr;
 		align-items: center;
-		gap: 10px;
-		padding-block: 5px;
-	}
-
-	.label {
-		display: flex;
-		align-items: center;
-		gap: 7px;
-		font-size: 0.86rem;
-		color: var(--text-muted);
-		min-width: 0;
+		gap: 12px;
+		padding-block: 4px;
 	}
 
 	.name {
+		font-size: 0.85rem;
+		color: var(--text-muted);
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -125,75 +104,65 @@
 
 	.track {
 		position: relative;
-		height: 26px;
-		margin-right: 46px;
+		height: 28px;
+		margin-right: 48px;
 	}
 
 	.bar {
 		position: absolute;
-		top: 5px;
+		top: 6px;
 		height: 16px;
 		border-radius: 999px;
 		background: linear-gradient(
 			90deg,
-			color-mix(in srgb, var(--accent) 45%, transparent),
+			color-mix(in srgb, var(--accent) 40%, transparent),
 			var(--accent)
 		);
 		min-width: 4px;
+		transition: filter 0.2s var(--ease);
+	}
+
+	.row:hover .bar {
+		filter: brightness(1.12);
 	}
 
 	.bar.soft {
 		background-image: repeating-linear-gradient(
 			135deg,
 			var(--accent) 0 5px,
-			color-mix(in srgb, var(--accent) 45%, transparent) 5px 10px
+			color-mix(in srgb, var(--accent) 38%, transparent) 5px 10px
 		);
 	}
 
 	.endcap {
 		position: absolute;
-		top: 4px;
-		margin-left: 8px;
+		top: 5px;
+		margin-left: 9px;
 		font-size: 0.76rem;
-		font-weight: 640;
-		font-variant-numeric: tabular-nums;
+		font-weight: 550;
 		color: var(--text-muted);
 		white-space: nowrap;
 	}
 
 	.axis {
 		position: relative;
-		height: 26px;
-		margin-left: var(--label-w, 190px);
-		margin-right: 46px;
+		height: 28px;
+		margin-left: var(--label-w, 200px);
+		margin-right: 48px;
 		border-top: 1px solid var(--border);
 	}
 
 	.axis span {
 		position: absolute;
-		top: 5px;
+		top: 7px;
 		transform: translateX(-50%);
 		font-size: 0.72rem;
 		color: var(--text-faint);
-		font-variant-numeric: tabular-nums;
-	}
-
-	.visually-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		overflow: hidden;
-		clip-path: inset(50%);
-		white-space: nowrap;
 	}
 
 	@media (max-width: 640px) {
 		.chart {
-			--label-w: 116px;
-		}
-
-		.label span:first-child {
-			display: none;
+			--label-w: 118px;
 		}
 	}
 </style>

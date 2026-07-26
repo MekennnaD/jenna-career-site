@@ -2,7 +2,11 @@
 	import type { Career, Interest } from '$lib/types';
 	import { money } from '$lib/format';
 
-	let { career, interests }: { career: Career; interests: Interest[] } = $props();
+	let {
+		career,
+		interests,
+		index = 0
+	}: { career: Career; interests: Interest[]; index?: number } = $props();
 
 	const matched = $derived(interests.filter((i) => career.interests.includes(i.id)));
 
@@ -12,40 +16,38 @@
 		career.entry.confidence === 'estimate' || career.ceiling.confidence === 'estimate'
 	);
 
-	const competitionClass = $derived(
-		career.attainability.competition === 'Low' || career.attainability.competition === 'Moderate'
-			? 'ok'
-			: 'warn'
-	);
-
-	// Colour the meter by rating so "more filled" reads unambiguously as harder,
-	// rather than leaving the viewer to guess whether green means good or done.
-	const difficultyTone = $derived(
-		career.attainability.difficulty <= 2 ? 'easy' : career.attainability.difficulty === 3 ? 'mid' : 'hard'
+	// Difficulty and competition both shade toward the signal hue as they get
+	// worse, so "more colour" always reads as "more in your way" — never as a
+	// completed progress bar.
+	const hardish = $derived(career.attainability.difficulty >= 4);
+	const crowded = $derived(
+		career.attainability.competition === 'High' || career.attainability.competition === 'Very high'
 	);
 </script>
 
-<article class="card">
+<article class="card rise" class:featured={career.topPick} style="--i: {index}">
 	<header>
-		<span class="emoji" aria-hidden="true">{career.emoji}</span>
 		<div class="titles">
 			<h3>{career.title}</h3>
 			<p class="track">{career.track}</p>
 		</div>
 		{#if career.topPick}
-			<span class="pill pill--gold">★ Best fit</span>
+			<span class="pill pill--accent">Closest to reach</span>
 		{/if}
 	</header>
 
-	<!-- Attainability first: pay is meaningless if the door won't open. -->
-	<div class="attain">
+	<!-- Attainability leads. Pay is irrelevant if the door won't open. -->
+	<section class="attain" aria-label="How reachable this is">
 		<div class="difficulty">
 			<div class="difficulty-head">
-				<span class="label">How hard from where you are</span>
-				<span class="difficulty-value">{career.attainability.difficultyLabel}</span>
+				<p class="label">Difficulty from where you are</p>
+				<p class="difficulty-value" class:warn={hardish}>
+					{career.attainability.difficultyLabel}
+				</p>
 			</div>
 			<div
-				class="meter {difficultyTone}"
+				class="meter"
+				class:warn={hardish}
 				role="meter"
 				aria-valuenow={career.attainability.difficulty}
 				aria-valuemin="1"
@@ -60,46 +62,74 @@
 
 		<dl class="attain-facts">
 			<div>
-				<dt>Competition</dt>
-				<dd class={competitionClass}>{career.attainability.competition}</dd>
+				<dt class="label">Competition</dt>
+				<dd class:warn={crowded}>{career.attainability.competition}</dd>
 			</div>
 			<div>
-				<dt>Time to first offer</dt>
+				<dt class="label">Time to first offer</dt>
 				<dd>{career.attainability.timeToEntry}</dd>
 			</div>
 		</dl>
-	</div>
+	</section>
 
 	<div class="barrier">
-		<h4>What's actually in the way</h4>
+		<p class="label">What's actually in the way</p>
 		<p>{career.attainability.barrier}</p>
 	</div>
 
 	<dl class="figures">
 		<div>
-			<dt>Starting</dt>
-			<dd>{money(career.entry.median)}</dd>
+			<dt class="label">Starting</dt>
+			<dd class="num">{money(career.entry.median)}</dd>
 			<p>{career.entry.title}{career.entry.confidence === 'estimate' ? ' · estimate' : ''}</p>
 		</div>
 		<div>
-			<dt>Ceiling</dt>
-			<dd>{money(career.ceiling.median)}</dd>
+			<dt class="label">Ceiling</dt>
+			<dd class="num">{money(career.ceiling.median)}</dd>
 			<p>{career.ceiling.title}{career.ceiling.confidence === 'estimate' ? ' · estimate' : ''}</p>
 		</div>
 		<div>
-			<dt>Growth</dt>
-			<dd>{career.growth === null ? '—' : `+${career.growth}%`}</dd>
+			<dt class="label">Growth</dt>
+			<dd class="num">{career.growth === null ? '—' : `+${career.growth}%`}</dd>
 			<p>{career.growth === null ? 'No BLS projection' : 'Projected 2024–34'}</p>
 		</div>
 	</dl>
 
-	<h4>Why this fits you</h4>
-	<p class="body">{career.why}</p>
-
-	<div class="first-move">
-		<h4>Do this first</h4>
-		<p>{career.firstMove}</p>
+	<div class="why">
+		<p class="label">Why this fits you</p>
+		<p>{career.why}</p>
 	</div>
+
+	<!--
+		Collapsed by default. Expanded, a nine-card grid becomes nine 2,000px
+		columns and nothing can be compared against anything — and CSS grid rows
+		size to their tallest card, so uneven heights leave large dead gaps.
+		Scan first, open the one that interests you.
+	-->
+	<details class="roadmap">
+		<summary>
+			<span>Roadmap — {career.roadmap.length} steps from where you are</span>
+			<span class="chevron" aria-hidden="true">↓</span>
+		</summary>
+		<ol>
+			{#each career.roadmap as step, i (step.action)}
+				<li>
+					<div class="marker" aria-hidden="true">
+						<span class="dot"></span>
+						{#if i < career.roadmap.length - 1}<span class="rail"></span>{/if}
+					</div>
+					<div class="step">
+						<p class="when">
+							{step.when}
+							{#if step.cost}<span class="cost">{step.cost}</span>{/if}
+						</p>
+						<h4>{step.action}</h4>
+						<p class="detail">{step.detail}</p>
+					</div>
+				</li>
+			{/each}
+		</ol>
+	</details>
 
 	{#if matched.length}
 		<ul class="tags">
@@ -110,7 +140,7 @@
 	{/if}
 
 	<footer>
-		<h4>Check these numbers</h4>
+		<p class="label">Check these numbers</p>
 		<ul class="sources">
 			{#each career.sources as source (source.url)}
 				<li>
@@ -130,45 +160,59 @@
 
 <style>
 	article {
-		padding: 22px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-sm);
+		padding: 26px 24px 22px;
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+		gap: 20px;
+		transition:
+			transform 0.25s var(--ease),
+			box-shadow 0.25s var(--ease),
+			border-color 0.25s var(--ease);
+	}
+
+	article:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--border-strong);
+	}
+
+	.featured {
+		border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+		box-shadow: var(--shadow-md);
 	}
 
 	header {
 		display: flex;
 		align-items: flex-start;
+		justify-content: space-between;
 		gap: 12px;
 	}
 
-	.emoji {
-		font-size: 1.6rem;
-		line-height: 1.2;
-	}
-
 	.titles {
-		flex: 1;
 		min-width: 0;
 	}
 
 	h3 {
-		font-size: 1.24rem;
-		font-weight: 650;
+		font-size: 1.3rem;
+		font-weight: 600;
 	}
 
 	.track {
 		font-size: 0.85rem;
 		color: var(--text-faint);
-		margin-top: 3px;
+		margin-top: 5px;
 	}
 
 	.attain {
 		display: grid;
-		gap: 14px;
-		padding: 15px;
-		border-radius: var(--radius-sm);
-		border: 1px solid var(--border);
+		gap: 16px;
+		padding: 16px;
+		border-radius: var(--radius-md);
+		background: var(--surface-alt);
 	}
 
 	.difficulty-head {
@@ -176,90 +220,88 @@
 		flex-wrap: wrap;
 		align-items: baseline;
 		justify-content: space-between;
-		gap: 6px;
-	}
-
-	.label,
-	dt {
-		font-size: 0.7rem;
-		font-weight: 650;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--text-faint);
+		gap: 4px 10px;
 	}
 
 	.difficulty-value {
-		font-size: 0.92rem;
-		font-weight: 620;
-		color: var(--text);
+		font-size: 0.9rem;
+		font-weight: 550;
+		color: var(--accent-text);
+	}
+
+	.difficulty-value.warn {
+		color: var(--signal);
 	}
 
 	.meter {
 		display: flex;
 		gap: 4px;
-		margin-top: 8px;
+		margin-top: 10px;
 	}
 
 	.notch {
-		height: 6px;
+		height: 5px;
 		flex: 1;
 		border-radius: 999px;
-		background: var(--surface-alt);
-		border: 1px solid var(--border);
+		background: var(--surface-sunk);
 	}
 
-	.meter.easy .notch.filled {
+	.notch.filled {
 		background: var(--accent);
-		border-color: var(--accent);
 	}
 
-	.meter.mid .notch.filled {
-		background: var(--gold);
-		border-color: var(--gold);
+	.meter.warn .notch.filled {
+		background: var(--signal);
 	}
 
-	.meter.hard .notch.filled {
-		background: var(--hard);
-		border-color: var(--hard);
-	}
-
+	/**
+	 * `display: contents` on the wrappers promotes every dt and dd to a direct
+	 * grid item, so all labels share row 1 and all values share row 2. Without
+	 * it a label that wraps to two lines pushes its own value out of line with
+	 * the one beside it.
+	 */
 	.attain-facts {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 12px;
+		grid-template-rows: auto auto;
+		/* Column flow, so the flattened dt/dd order fills each column top-to-bottom
+		   and every label lands in row 1 with every value in row 2. */
+		grid-auto-flow: column;
+		gap: 4px 12px;
 		margin: 0;
-		padding-top: 12px;
+		padding-top: 14px;
 		border-top: 1px solid var(--border);
 	}
 
+	.attain-facts > div {
+		display: contents;
+	}
+
 	.attain-facts dd {
-		margin: 3px 0 0;
-		font-size: 0.92rem;
-		font-weight: 600;
+		margin: 0;
+		font-size: 0.9rem;
+		font-weight: 550;
+		align-self: start;
 	}
 
 	.attain-facts dd.warn {
-		color: var(--gold);
+		color: var(--signal);
 	}
 
-	.attain-facts dd.ok {
-		color: var(--accent-text);
-	}
-
-	.barrier p {
-		font-size: 0.9rem;
+	.barrier p:last-child,
+	.why p:last-child {
+		font-size: 0.93rem;
 		color: var(--text-muted);
-		margin-top: 5px;
+		margin-top: 7px;
 	}
 
 	.figures {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 12px;
+		gap: 14px;
 		margin: 0;
-		padding: 14px;
-		background: var(--surface-alt);
-		border-radius: var(--radius-sm);
+		padding: 16px 0;
+		border-block: 1px solid var(--border);
 	}
 
 	.figures > div {
@@ -267,50 +309,137 @@
 	}
 
 	.figures dd {
-		margin: 2px 0 0;
-		font-size: 1.16rem;
-		font-weight: 650;
-		font-variant-numeric: tabular-nums;
-		letter-spacing: -0.02em;
+		margin: 5px 0 0;
+		font-size: 1.2rem;
+		font-weight: 550;
 	}
 
 	.figures p {
 		font-size: 0.75rem;
 		color: var(--text-faint);
-		line-height: 1.35;
-		margin-top: 3px;
+		line-height: 1.4;
+		margin-top: 4px;
+	}
+
+	/**
+	 * The roadmap is the reason this card exists — a timeline rail rather than a
+	 * bullet list, so the sequence reads as a route rather than a menu.
+	 */
+	.roadmap {
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		padding: 4px 16px;
+		transition: border-color 0.2s var(--ease);
+	}
+
+	.roadmap:hover {
+		border-color: var(--accent);
+	}
+
+	.roadmap summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 12px 0;
+		cursor: pointer;
+		font-size: 0.88rem;
+		font-weight: 550;
+		color: var(--accent-text);
+		list-style: none;
+	}
+
+	.roadmap summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.chevron {
+		transition: transform 0.25s var(--ease);
+		font-size: 0.9rem;
+	}
+
+	.roadmap[open] .chevron {
+		transform: rotate(180deg);
+	}
+
+	.roadmap ol {
+		list-style: none;
+		margin: 8px 0 16px;
+		padding: 0;
+	}
+
+	.roadmap li {
+		display: grid;
+		grid-template-columns: 15px 1fr;
+		gap: 14px;
+	}
+
+	.marker {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		justify-items: center;
+		padding-top: 5px;
+	}
+
+	.dot {
+		width: 9px;
+		height: 9px;
+		border-radius: 999px;
+		background: var(--accent);
+		box-shadow: 0 0 0 3px var(--accent-soft);
+	}
+
+	.rail {
+		width: 1.5px;
+		height: 100%;
+		background: var(--border);
+		margin-top: 5px;
+	}
+
+	.step {
+		padding-bottom: 20px;
+		min-width: 0;
+	}
+
+	.roadmap li:last-child .step {
+		padding-bottom: 0;
+	}
+
+	.when {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		color: var(--text-faint);
+		text-transform: uppercase;
+	}
+
+	.cost {
+		font-family: var(--font-sans);
+		text-transform: none;
+		letter-spacing: 0;
+		padding: 1px 7px;
+		border-radius: var(--radius-xs);
+		background: var(--accent-soft);
+		color: var(--accent-text);
+		font-size: 0.72rem;
 	}
 
 	h4 {
-		font-size: 0.7rem;
-		font-weight: 650;
-		letter-spacing: 0.09em;
-		text-transform: uppercase;
-		color: var(--text-faint);
-		margin: 0;
-	}
-
-	.body {
-		color: var(--text-muted);
-		font-size: 0.94rem;
-		margin-top: -8px;
-	}
-
-	.first-move {
-		padding: 14px 16px;
-		border-radius: var(--radius-sm);
-		background: var(--accent-soft);
-	}
-
-	.first-move h4 {
-		color: var(--accent-text);
-		opacity: 0.8;
-	}
-
-	.first-move p {
-		font-size: 0.93rem;
+		margin: 5px 0 0;
+		font-size: 0.96rem;
 		font-weight: 550;
-		color: var(--accent-text);
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	.detail {
+		font-size: 0.89rem;
+		color: var(--text-muted);
 		margin-top: 5px;
 	}
 
@@ -325,16 +454,16 @@
 
 	footer {
 		border-top: 1px solid var(--border);
-		padding-top: 14px;
+		padding-top: 16px;
 		margin-top: auto;
 	}
 
 	.sources {
 		list-style: none;
-		margin: 8px 0 0;
+		margin: 10px 0 0;
 		padding: 0;
 		display: grid;
-		gap: 7px;
+		gap: 9px;
 	}
 
 	.sources li {
@@ -347,6 +476,7 @@
 		color: var(--accent-text);
 		font-weight: 550;
 		text-decoration: none;
+		width: fit-content;
 	}
 
 	.sources a:hover {
@@ -358,9 +488,9 @@
 	}
 
 	.soft-note {
-		font-size: 0.76rem;
+		font-size: 0.77rem;
 		color: var(--text-faint);
-		margin-top: 10px;
+		margin-top: 12px;
 	}
 
 	@media (max-width: 520px) {

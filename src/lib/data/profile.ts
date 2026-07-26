@@ -11,11 +11,6 @@ import type { Profile } from '$lib/types';
 export const profile: Profile = {
 	name: 'Jenna',
 	degree: 'Liberal arts degree',
-	headline: 'Nobody has a job title for "I notice how things should be organized." Several people do.',
-	summary: `You have four jobs, three retailers, a degree, and no obvious next step — which feels like
-		a problem with you and is actually a problem with translation. Below are nine real jobs your
-		experience already points at, each with what it pays, how hard it is to get from exactly where
-		you are, and the one thing to do first.`,
 
 	/** Work history, newest first. `signal` = what a hiring manager should read into it. */
 	jobs: [
