@@ -1,39 +1,58 @@
 # Where this goes
 
-A small SvelteKit site mapping career paths, certifications, and next steps for one
-specific person — built to be edited constantly rather than finished once.
+A single-page SvelteKit site mapping career paths for one specific person — Jenna, a
+liberal arts grad with four retail and warehouse jobs. It has exactly one reader, so
+everything is written to her directly in second person.
 
-Live at `https://<user>.github.io/jenna-career-site/` once GitHub Pages is enabled.
+The site answers three questions per path: **what does it pay**, **how hard is it to get
+from exactly where she stands**, and **where did that number come from**.
+
+Live at `https://<user>.github.io/jenna-career-site/`.
 
 ## Editing the content
 
-All content lives in `src/lib/data/`. No component or markup changes are needed to add
-anything — the pages read from these arrays.
+All content lives in `src/lib/data/`. No component or markup changes are needed — the
+page reads from these arrays.
 
-| File                | What's in it                                       |
-| ------------------- | -------------------------------------------------- |
-| `profile.ts`        | Work history, interests, resume translation table   |
-| `careers.ts`        | The nine career paths, salary figures, sort options |
-| `certifications.ts` | Five certification paths and their steps            |
-| `checklist.ts`      | The action checklist on `/plan`                     |
+| File         | What's in it                                        |
+| ------------ | --------------------------------------------------- |
+| `profile.ts` | Work history and interest tags                      |
+| `careers.ts` | The nine career paths, pay, attainability, sources  |
 
 Adding a career path means copying one object in `careers.ts` and changing the fields.
 The types in `src/lib/types.ts` are enforced, so `npm run check` will name any field
 that's missing.
 
+### Difficulty vs. competition
+
+These are separate axes and shouldn't be collapsed:
+
+- **`difficulty`** (1–5) is the ramp — how much she'd have to learn or prove, rated from
+  her actual position rather than in the abstract.
+- **`competition`** is applicant volume — how crowded the door is.
+
+Tech sales is easy to enter and brutally competitive to survive (difficulty 2,
+competition High). Operations management is uncrowded but takes years (difficulty 2,
+timeToEntry 1–3 years). One number couldn't carry both facts.
+
+`barrier` is the honest catch in prose — the thing that actually stands in the way.
+
 ### About the numbers
 
-Salary figures marked `confidence: 'bls'` are U.S. national medians from the Bureau of
-Labor Statistics Occupational Outlook Handbook (May 2024 wage data, growth projected
-2024–34). Each one links to its source page.
+Figures marked `confidence: 'bls'` are U.S. national medians from the Bureau of Labor
+Statistics Occupational Outlook Handbook (May 2024 wage data, employment growth
+projected 2024–34).
 
 Figures marked `confidence: 'estimate'` are self-reported salary aggregates for roles
-BLS doesn't track as distinct occupations — customer success and tech sales especially.
-The UI renders those with striped bars and a "softer numbers" tag, deliberately. Worth
-keeping that distinction honest when adding paths.
+BLS doesn't track as distinct occupations — customer success and tech sales. The UI
+labels these `estimate` on the card and draws them with striped bars in the chart,
+deliberately. Worth keeping that distinction honest when adding paths.
 
-National medians are useful for ranking paths against each other, not for predicting a
-paycheck.
+Every path carries a `sources[]` array where each entry names which figure it backs.
+Those feed both the per-card "check these numbers" list and the consolidated audit
+section at `#sources`, so no number on the site is unattributed.
+
+National medians rank paths against each other; they don't predict a paycheck.
 
 ## Running it
 

@@ -1,9 +1,8 @@
 /**
  * Shared content types.
  *
- * These exist so that adding a career path or certification step is a
- * type-checked operation — miss a field and `npm run check` says so before
- * anything ships.
+ * These exist so adding a career path is type-checked — miss a field and
+ * `npm run check` says so before it ships.
  */
 
 /** Where a salary figure came from, so the UI can be honest about precision. */
@@ -27,13 +26,6 @@ export interface Job {
 	signal: string;
 }
 
-export interface Translation {
-	/** How she'd describe it. */
-	from: string;
-	/** How a resume should describe it. */
-	to: string;
-}
-
 export interface Profile {
 	name: string;
 	degree: string;
@@ -41,7 +33,13 @@ export interface Profile {
 	summary: string;
 	jobs: Job[];
 	interests: Interest[];
-	translations: Translation[];
+}
+
+export interface Source {
+	label: string;
+	url: string;
+	/** Which figure on the card this link backs up, e.g. "Ceiling pay + growth". */
+	backs: string;
 }
 
 export interface SalaryPoint {
@@ -51,9 +49,25 @@ export interface SalaryPoint {
 	confidence: Confidence;
 }
 
-export interface Source {
-	label: string;
-	url: string;
+/**
+ * How realistic a path is *from Jenna's exact position* — a liberal arts degree,
+ * four retail/warehouse jobs, no white-collar title yet.
+ *
+ * `difficulty` is effort and ramp: how much she has to learn or prove.
+ * `competition` is applicant volume: how crowded the door is.
+ * They are genuinely different — tech sales is easy to enter and brutally
+ * competitive to keep; ops management is uncrowded but takes years.
+ */
+export interface Attainability {
+	/** 1 = walk in from where she stands, 5 = career change with a long ramp. */
+	difficulty: 1 | 2 | 3 | 4 | 5;
+	/** Plain-language gloss on the number, e.g. "Very doable". */
+	difficultyLabel: string;
+	competition: 'Low' | 'Moderate' | 'High' | 'Very high';
+	/** Realistic time from today to a first offer in this track. */
+	timeToEntry: string;
+	/** The specific thing standing in the way — the honest catch. */
+	barrier: string;
 }
 
 export interface Career {
@@ -69,51 +83,16 @@ export interface Career {
 	ceiling: SalaryPoint;
 	/** Projected percent growth 2024–34, or null where BLS has no matching occupation. */
 	growth: number | null;
-	source: Source;
+	attainability: Attainability;
+	/** Why her actual history maps onto this work. Written to her, in second person. */
 	why: string;
+	/** The single next action for this path. */
 	firstMove: string;
-	timeline: string;
+	/** Every source backing the numbers on this card. At least one. */
+	sources: Source[];
 }
 
 export interface SortOption {
 	label: string;
 	fn: (a: Career, b: Career) => number;
-}
-
-export interface CertStep {
-	name: string;
-	/** Approximate USD; 0 means genuinely free. Used for the cheap→expensive ordering. */
-	cost: number;
-	/** Human-facing price, e.g. "~$220–350". Shown instead of `cost`. */
-	costLabel: string;
-	time: string;
-	provider: string;
-	url: string | null;
-	note: string;
-}
-
-export interface CertPath {
-	id: string;
-	title: string;
-	emoji: string;
-	/** True when this path matches something she has said she's drawn to. */
-	matchesInterest: boolean;
-	leadsTo: string;
-	pitch: string;
-	/** Ordered cheapest → most expensive. The first step should always cost $0. */
-	steps: CertStep[];
-}
-
-export interface FreeStarter {
-	label: string;
-	pathId: string;
-	time: string;
-}
-
-export interface ChecklistItem {
-	id: string;
-	label: string;
-	detail: string;
-	/** Groups items in the UI. */
-	group: string;
 }

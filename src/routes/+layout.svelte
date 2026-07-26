@@ -1,53 +1,31 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { page } from '$app/state';
 	import '../app.css';
 
 	let { children } = $props();
-
-	const links = [
-		{ href: '/', label: 'Paths' },
-		{ href: '/certifications', label: 'Certifications' },
-		{ href: '/plan', label: 'The plan' }
-	];
-
-	// `page.url.pathname` already includes the base path, so compare against the
-	// prefixed href rather than the bare one.
-	function isCurrent(href: string) {
-		const full = `${base}${href}`;
-		return href === '/' ? page.url.pathname === full : page.url.pathname.startsWith(full);
-	}
 </script>
 
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#paths">Skip to the paths</a>
 
 <header>
-	<nav class="page nav" aria-label="Main">
+	<div class="page nav">
 		<a class="wordmark" href="{base}/">
 			<span aria-hidden="true">🧭</span>
 			<span>Where this goes</span>
 		</a>
-		<ul>
-			{#each links as link (link.href)}
-				<li>
-					<a href="{base}{link.href}" aria-current={isCurrent(link.href) ? 'page' : undefined}>
-						{link.label}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</nav>
+		<a class="sources-link" href="#sources">Sources</a>
+	</div>
 </header>
 
-<main id="main">
+<main>
 	{@render children()}
 </main>
 
 <footer>
 	<div class="page">
 		<p>
-			A working document, not a verdict. Every number here links to where it came from, and
-			everything is editable — if something is wrong or out of date, change it.
+			A working document, not a verdict. Every number links to where it came from, and everything
+			here is editable — if something is wrong or out of date, it should be changed.
 		</p>
 	</div>
 </footer>
@@ -96,36 +74,18 @@
 		text-decoration: none;
 	}
 
-	ul {
-		display: flex;
-		gap: 4px;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	ul a {
-		display: block;
-		padding: 6px 12px;
-		border-radius: 999px;
-		font-size: 0.94rem;
+	.sources-link {
+		font-size: 0.88rem;
 		font-weight: 550;
 		color: var(--text-muted);
 		text-decoration: none;
+		padding: 6px 12px;
+		border-radius: 999px;
 	}
 
-	ul a:hover {
+	.sources-link:hover {
 		background: var(--surface-alt);
 		color: var(--text);
-	}
-
-	ul a[aria-current='page'] {
-		background: var(--accent-soft);
-		color: var(--accent-text);
-	}
-
-	main {
-		padding-top: 8px;
 	}
 
 	footer {

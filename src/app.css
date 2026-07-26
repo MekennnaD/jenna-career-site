@@ -23,6 +23,10 @@
 	--gold: #a97514;
 	--gold-soft: #fbf0da;
 
+	/* Used for the top of the difficulty scale. Warm, not alarming — a hard path
+	   is not a forbidden one. */
+	--hard: #b1502f;
+
 	--star: #b4741a;
 
 	--radius: 14px;
@@ -57,6 +61,8 @@
 
 		--gold: #e0ac54;
 		--gold-soft: #33270f;
+
+		--hard: #e08363;
 
 		--star: #e0ac54;
 
